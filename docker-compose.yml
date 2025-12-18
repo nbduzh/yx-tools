@@ -16,7 +16,7 @@ services:
     # 网络模式
     networks:
       isolated_network:
-        ipv4_address: 172.20.0.10  # 指定独立IP
+        ipv4_address: 172.60.0.10  # 指定独立IP
     # 环境变量
     environment:
       - TZ=Asia/Shanghai
@@ -37,6 +37,6 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
-          gateway: 172.20.0.1
+        - subnet: 172.60.0.0/16
+          gateway: 172.60.0.1
 
