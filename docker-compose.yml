@@ -17,7 +17,6 @@ services:
     networks:
       isolated_network:
         ipv4_address: 172.20.0.10  # 指定独立IP
-    restart: unless-stopped
     # 环境变量
     environment:
       - TZ=Asia/Shanghai
