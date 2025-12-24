@@ -1250,7 +1250,7 @@ def handle_beginner_mode(ip_file=CLOUDFLARE_IP_FILE, ip_version="ipv4"):
     if sys.platform == "win32":
         cmd = [exec_name]
     else:
-        cmd = [f"./{exec_name}"]
+        cmd = [f"{exec_name}"]
     
     cmd.extend([
         "-f", ip_file,
@@ -1477,7 +1477,7 @@ def handle_normal_mode(ip_file=CLOUDFLARE_IP_FILE, ip_version="ipv4"):
             if sys.platform == "win32":
                 cmd = [exec_name]
             else:
-                cmd = [f"./{exec_name}"]
+                cmd = [f"{exec_name}"]
             
             cmd.extend([
                 "-f", region_ip_file,
@@ -1622,7 +1622,7 @@ def run_speedtest_with_file(ip_file, dn_count, speed_limit, time_limit, thread_c
         
         # 构建命令（反代模式使用TCPing，专注于端口信息）
         cmd = [
-            f"./{exec_name}",
+            f"{exec_name}",
             "-f", ip_file,
             "-n", thread_count,
             "-dn", dn_count,
@@ -1669,7 +1669,7 @@ def run_speedtest(exec_name, cfcolo, dn_count, speed_limit, time_limit, thread_c
     if sys.platform == "win32":
         cmd = [exec_name]
     else:
-        cmd = [f"./{exec_name}"]
+        cmd = [f"{exec_name}"]
     
     cmd.extend([
         "-n", thread_count,
@@ -1838,7 +1838,7 @@ def run_with_args(args):
         if sys.platform == "win32":
             cmd = [exec_name]
         else:
-            cmd = [f"./{exec_name}"]
+            cmd = [f"{exec_name}"]
         
         cmd.extend([
             "-f", ip_file,
@@ -1926,7 +1926,7 @@ def run_with_args(args):
         if sys.platform == "win32":
             cmd = [exec_name]
         else:
-            cmd = [f"./{exec_name}"]
+            cmd = [f"{exec_name}"]
         
         cmd.extend([
             "-f", region_ip_file,
@@ -4185,7 +4185,7 @@ def detect_available_regions():
     if sys.platform == "win32":
         cmd = [exec_name]
     else:
-        cmd = [f"./{exec_name}"]
+        cmd = [f"{exec_name}"]
     
     cmd.extend([
         "-dd",  # 禁用下载测速，只做延迟测试
