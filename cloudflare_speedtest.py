@@ -1894,7 +1894,7 @@ def run_with_args(args):
             return 1
         
         # 检查是否有地区扫描结果
-        if not os.path.exists("region_scan.csv"):
+        if not os.path.exists("{FILEPATH}region_scan.csv"):
             print("⚠️  未找到地区扫描结果文件，建议先运行交互式模式进行地区检测")
             print("   或者使用小白快速测试模式")
             return 1
