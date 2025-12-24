@@ -17,6 +17,7 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 
+FILEPATH="/volume4/docker/cf-speedtest/"
 
 # 使用curl的备用HTTP请求函数（解决SSL模块不可用的问题）
 def curl_request(url, method='GET', data=None, headers=None, timeout=30):
@@ -545,9 +546,9 @@ def download_cloudflare_speedtest(os_type, arch_type):
     """下载 CloudflareSpeedTest 可执行文件（优先使用反代版本）"""
     # 优先检查反代版本
     if os_type == "win":
-        proxy_exec_name = f"CloudflareST_proxy_{os_type}_{arch_type}.exe"
+        proxy_exec_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}.exe"
     else:
-        proxy_exec_name = f"CloudflareST_proxy_{os_type}_{arch_type}"
+        proxy_exec_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}"
     
     if os.path.exists(proxy_exec_name):
         print(f"✓ 使用反代版本: {proxy_exec_name}")
@@ -590,9 +591,9 @@ def download_cloudflare_speedtest(os_type, arch_type):
             
             # 检查是否有手动下载的反代版本文件
             if os_type == "win":
-                proxy_exec_name = f"CloudflareST_proxy_{os_type}_{arch_type}.exe"
+                proxy_exec_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}.exe"
             else:
-                proxy_exec_name = f"CloudflareST_proxy_{os_type}_{arch_type}"
+                proxy_exec_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}"
             
             if os.path.exists(proxy_exec_name):
                 print(f"找到手动下载的反代版本: {proxy_exec_name}")
@@ -632,9 +633,9 @@ def download_cloudflare_speedtest(os_type, arch_type):
             if found_executable:
                 # 获取最终文件名 - 使用标准格式
                 if os_type == "win":
-                    final_name = f"CloudflareST_proxy_{os_type}_{arch_type}.exe"
+                    final_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}.exe"
                 else:
-                    final_name = f"CloudflareST_proxy_{os_type}_{arch_type}"
+                    final_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}"
                 
                 # 如果文件不在当前目录或文件名不匹配，移动到当前目录并重命名
                 if os.path.abspath(found_executable) != os.path.abspath(final_name):
