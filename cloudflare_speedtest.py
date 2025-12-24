@@ -17,7 +17,7 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 
-FILEPATH="/volume4/docker/cf-speedtest/"
+APP_PATH = os.getenv("APP_PATH", "/volume4/docker/cf-speedtest/")
 
 # 使用curl的备用HTTP请求函数（解决SSL模块不可用的问题）
 def curl_request(url, method='GET', data=None, headers=None, timeout=30):
@@ -546,9 +546,9 @@ def download_cloudflare_speedtest(os_type, arch_type):
     """下载 CloudflareSpeedTest 可执行文件（优先使用反代版本）"""
     # 优先检查反代版本
     if os_type == "win":
-        proxy_exec_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}.exe"
+        proxy_exec_name = f"{APP_PATH}CloudflareST_proxy_{os_type}_{arch_type}.exe"
     else:
-        proxy_exec_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}"
+        proxy_exec_name = f"{APP_PATH}CloudflareST_proxy_{os_type}_{arch_type}"
     
     if os.path.exists(proxy_exec_name):
         print(f"✓ 使用反代版本: {proxy_exec_name}")
@@ -591,9 +591,9 @@ def download_cloudflare_speedtest(os_type, arch_type):
             
             # 检查是否有手动下载的反代版本文件
             if os_type == "win":
-                proxy_exec_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}.exe"
+                proxy_exec_name = f"{APP_PATH}CloudflareST_proxy_{os_type}_{arch_type}.exe"
             else:
-                proxy_exec_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}"
+                proxy_exec_name = f"{APP_PATH}CloudflareST_proxy_{os_type}_{arch_type}"
             
             if os.path.exists(proxy_exec_name):
                 print(f"找到手动下载的反代版本: {proxy_exec_name}")
@@ -633,9 +633,9 @@ def download_cloudflare_speedtest(os_type, arch_type):
             if found_executable:
                 # 获取最终文件名 - 使用标准格式
                 if os_type == "win":
-                    final_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}.exe"
+                    final_name = f"{APP_PATH}CloudflareST_proxy_{os_type}_{arch_type}.exe"
                 else:
-                    final_name = f"{FILEPATH}CloudflareST_proxy_{os_type}_{arch_type}"
+                    final_name = f"{APP_PATH}CloudflareST_proxy_{os_type}_{arch_type}"
                 
                 # 如果文件不在当前目录或文件名不匹配，移动到当前目录并重命名
                 if os.path.abspath(found_executable) != os.path.abspath(final_name):
@@ -1446,12 +1446,12 @@ def handle_normal_mode(ip_file=CLOUDFLARE_IP_FILE, ip_version="ipv4"):
     print("模式: 常规测速（指定地区）")
     
     # 从地区扫描结果中提取该地区的IP进行测速
-    if os.path.exists("region_scan.csv"):
+    if os.path.exists(f"{APP_PATH}region_scan.csv"):
         print(f"\n正在从扫描结果中提取 {cfcolo} 地区的IP...")
         
         # 读取该地区的IP
         region_ips = []
-        with open("region_scan.csv", 'r', encoding='utf-8') as f:
+        with open(f"{APP_PATH}region_scan.csv", 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 colo = (row.get('地区码') or '').strip()
@@ -1894,14 +1894,14 @@ def run_with_args(args):
             return 1
         
         # 检查是否有地区扫描结果
-        if not os.path.exists(f"{FILEPATH}region_scan.csv"):
+        if not os.path.exists(f"{APP_PATH}region_scan.csv"):
             print("⚠️  未找到地区扫描结果文件，建议先运行交互式模式进行地区检测")
             print("   或者使用小白快速测试模式")
             return 1
         
         # 从地区扫描结果中提取该地区的IP
         region_ips = []
-        with open("region_scan.csv", 'r', encoding='utf-8') as f:
+        with open(f"{APP_PATH}region_scan.csv", 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 colo = (row.get('地区码') or '').strip()
@@ -4148,7 +4148,7 @@ def upload_to_github_cli(result_file="result.csv", repo_info=None, github_token=
 def detect_available_regions():
     """检测可用地区"""
     # 检查是否已有检测结果文件
-    if os.path.exists("region_scan.csv"):
+    if os.path.exists(f"{APP_PATH}region_scan.csv"):
         print("发现已有的地区扫描结果文件")
         choice = input("是否需要重新扫描？[y/N]: ").strip().lower()
         if choice != 'y':
@@ -4157,7 +4157,7 @@ def detect_available_regions():
             available_regions = []
             region_counts = {}
             
-            with open("region_scan.csv", 'r', encoding='utf-8') as f:
+            with open(f"{APP_PATH}region_scan.csv", 'r', encoding='utf-8') as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     colo = (row.get('地区码') or '').strip()
@@ -4193,7 +4193,7 @@ def detect_available_regions():
         "-f", CLOUDFLARE_IP_FILE,
         "-httping",  # 使用HTTPing模式获取地区码
         "-url", "https://jhb.ovh",
-        "-o", "region_scan.csv"  # 输出到地区扫描文件
+        "-o", f"{APP_PATH}region_scan.csv"  # 输出到地区扫描文件
     ])
     
     try:
@@ -4204,12 +4204,12 @@ def detect_available_regions():
         # 直接运行命令，显示完整输出
         result = subprocess.run(cmd, timeout=120, encoding='utf-8', errors='replace')
         
-        if result.returncode == 0 and os.path.exists("region_scan.csv"):
+        if result.returncode == 0 and os.path.exists(f"{APP_PATH}region_scan.csv"):
             # 读取检测结果
             available_regions = []
             region_counts = {}  # 统计每个地区的IP数量
             
-            with open("region_scan.csv", 'r', encoding='utf-8') as f:
+            with open(f"{APP_PATH}region_scan.csv", 'r', encoding='utf-8') as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     colo = (row.get('地区码') or '').strip()
